@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 public class MainScript : MonoBehaviour
 {
     // buttons for switching between scenes
-    public void ButtonSwitching(int num)
+    public void ButtonSwitchingScene(int numScene)
     {
-        SceneManager.LoadScene(num);
+        SceneManager.LoadScene(numScene);
     }
 
     // Start is called before the first frame update
