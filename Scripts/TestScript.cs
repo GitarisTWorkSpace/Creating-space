@@ -29,4 +29,5 @@ public class TestScript : MonoBehaviour
 
         Camera.main.transform.rotation = originRotation * rotetionY * rotetionX;
     }
+
 }
