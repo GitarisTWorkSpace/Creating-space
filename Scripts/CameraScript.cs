@@ -15,8 +15,8 @@ public class CameraScript : MonoBehaviour
 
     public bool rotateOnlyIfMousedown = false; // должна ли варщаться камера 
 
-    private Vector3 StartPositionCamera = new Vector3(0, 5, 0);
-    public Vector3 Speed;
+    private Vector3 StartPositionCamera = new Vector3(0, 7, -10);
+    public Vector3 Speed; // скорость перемешения камеры
 
     private Vector3 lastMouse = new Vector3(255, 255, 255);
 
@@ -45,22 +45,27 @@ public class CameraScript : MonoBehaviour
 
     public void GetButtonUP()
     {
-        Speed = new Vector3(0, 0, 0.01f);
+        Speed = new Vector3(0, 0, 0.05f);
     }
 
     public void GetButtonDOWN()
     {
-        Speed = new Vector3(0, 0, -0.01f);
+        Speed = new Vector3(0, 0, -0.05f);
     }
 
     public void GetButtonLEFT()
     {
-        Speed = new Vector3(-0.01f, 0, 0);
+        Speed = new Vector3(-0.05f, 0, 0);
     }
 
     public void GetButtonRIGHT()
     {
-        Speed = new Vector3(0.01f, 0, 0);
+        Speed = new Vector3(0.05f, 0, 0);
+    }
+
+    public void StartPoition()
+    {
+        Camera.main.transform.position = StartPositionCamera;
     }
 
     private void Update()
@@ -80,5 +85,12 @@ public class CameraScript : MonoBehaviour
         {
             Camera.main.transform.position += Speed;
         }
+
+        if (Camera.main.transform.position.z >= 16 || Camera.main.transform.position.z <= -16)
+            StartPoition();
+
+        if (Camera.main.transform.position.x >= 16 || Camera.main.transform.position.x <= -16)
+            StartPoition();
+
     }
 }
