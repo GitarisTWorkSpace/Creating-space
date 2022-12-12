@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
-    Quaternion originRotation;
+    Quaternion originRotation; // Начальный угол поворота
+    float angleHorizontal; // угол по горизонтали
+    float angleVertical; // угол по вертикали
 
-    float angleX;
-    float angleY;
-    float canSen = 5f;
+    [SerializeField] public float camSens = 1f; // скарость врашения камеры
     // Start is called before the first frame update
     void Start()
     {
@@ -18,14 +18,14 @@ public class TestScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        angleX += Input.GetAxis("Mouse X") * canSen;
-        angleY += Input.GetAxis("Mouse Y") * canSen;
+        angleHorizontal += Input.GetAxis("Mouse X") * camSens;
+        angleVertical += Input.GetAxis("Mouse Y") * camSens;
 
-        angleY = Mathf.Clamp(angleY, -80, 80);
-        angleX = Mathf.Clamp(angleX, -270, 270);
+        angleVertical = Mathf.Clamp(angleVertical, -60, 60);
+        angleHorizontal = Mathf.Clamp(angleHorizontal, -60, 60);
 
-        Quaternion rotetionY = Quaternion.AngleAxis(angleY, Vector3.up);
-        Quaternion rotetionX = Quaternion.AngleAxis(-angleX, Vector3.right);
+        Quaternion rotetionX = Quaternion.AngleAxis(angleHorizontal, Vector3.up);
+        Quaternion rotetionY = Quaternion.AngleAxis(-angleVertical, Vector3.right);
 
         Camera.main.transform.rotation = originRotation * rotetionY * rotetionX;
     }
