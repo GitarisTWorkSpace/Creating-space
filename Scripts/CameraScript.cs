@@ -8,26 +8,24 @@ public class CameraScript : MonoBehaviour
 {
     public GameObject MoveCameraPanel; // Панель кнопок перемешения камеры
 
-    public Transform target; // объект вокруг которого должна крутиться камера
+    Quaternion originRotation; // Начальный угол поворота
+    float angleHorizontal; // угол по горизонтали
+    float angleVertical; // угол по вертикали
 
-    public float mainSpeed = 100.0f; // скорость перемешения камеры
-    public float camSens = 0.25f; // скарость врашения камеры
+    [SerializeField] public float mainSpeed = 0.05f; // скорость перемешения камеры
+    [SerializeField] public float camSens = 100f; // скарость врашения камеры
 
-    public bool rotateOnlyIfMousedown = false; // должна ли варщаться камера 
+    public bool movementCamera = false; // должна ли варщаться и пермещаться камера 
 
-    private Vector3 StartPositionCamera = new Vector3(0, 7, -10);
+    private Vector3 StartPositionCamera = new Vector3(0, 7, -10); // начальная позиция камеры
     public Vector3 Speed; // скорость перемешения камеры
-
-    private Vector3 lastMouse = new Vector3(255, 255, 255);
-
-    private string pos;
 
     public void CameraONMoveButton()
     {
-        if (rotateOnlyIfMousedown)
-            rotateOnlyIfMousedown = false;
-        else if (!rotateOnlyIfMousedown)
-            rotateOnlyIfMousedown = true;
+        if (movementCamera)
+            movementCamera = false;
+        else if (!movementCamera)
+            movementCamera = true;
     }
 
     public void MoveCameraPanelSetActive()
@@ -45,22 +43,22 @@ public class CameraScript : MonoBehaviour
 
     public void GetButtonUP()
     {
-        Speed = new Vector3(0, 0, 0.05f);
+        Speed = new Vector3(0, 0, mainSpeed);
     }
 
     public void GetButtonDOWN()
     {
-        Speed = new Vector3(0, 0, -0.05f);
+        Speed = new Vector3(0, 0, -mainSpeed);
     }
 
     public void GetButtonLEFT()
     {
-        Speed = new Vector3(-0.05f, 0, 0);
+        Speed = new Vector3(-mainSpeed, 0, 0);
     }
 
     public void GetButtonRIGHT()
     {
-        Speed = new Vector3(0.05f, 0, 0);
+        Speed = new Vector3(mainSpeed, 0, 0);
     }
 
     public void StartPoition()
@@ -68,20 +66,28 @@ public class CameraScript : MonoBehaviour
         Camera.main.transform.position = StartPositionCamera;
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetMouseButtonDown(0))
-            lastMouse = Input.mousePosition;
-        if (/*!rotateOnlyIfMousedown ||*/ rotateOnlyIfMousedown && Input.GetMouseButton(0))
+        originRotation = Camera.main.transform.rotation;
+    }
+
+    private void FixedUpdate()
+    {
+        if (movementCamera)
         {
-            lastMouse = Input.mousePosition - lastMouse;
-            lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
-            lastMouse = new Vector3(Camera.main.transform.eulerAngles.x + lastMouse.x, Camera.main.transform.eulerAngles.y + lastMouse.y, 0);
-            Camera.main.transform.eulerAngles = lastMouse;
-            lastMouse = Input.mousePosition;
+            angleHorizontal += Input.GetAxis("Mouse X") * camSens;
+            angleVertical += Input.GetAxis("Mouse Y") * camSens;
+
+            angleVertical = Mathf.Clamp(angleVertical, -60, 60);
+            angleHorizontal = Mathf.Clamp(angleHorizontal, -60, 60);
+
+            Quaternion rotetionX = Quaternion.AngleAxis(angleHorizontal, Vector3.up);
+            Quaternion rotetionY = Quaternion.AngleAxis(-angleVertical, Vector3.right);
+
+            Camera.main.transform.rotation = originRotation * rotetionY * rotetionX;
         }
 
-        if (rotateOnlyIfMousedown)
+        if (movementCamera)
         {
             Camera.main.transform.position += Speed;
         }
@@ -91,6 +97,5 @@ public class CameraScript : MonoBehaviour
 
         if (Camera.main.transform.position.x >= 16 || Camera.main.transform.position.x <= -16)
             StartPoition();
-
     }
 }
