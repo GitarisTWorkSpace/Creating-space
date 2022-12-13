@@ -19,4 +19,9 @@ public class BlocksMovementScript : MonoBehaviour
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
         transform.position = curPosition;
     }
+
+    private void Update()
+    {
+       
+    }
 }

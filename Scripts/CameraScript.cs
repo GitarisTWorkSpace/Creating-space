@@ -41,12 +41,12 @@ public class CameraScript : MonoBehaviour
         Speed = new Vector3(0, 0, 0);
     }
 
-    public void GetButtonUP()
+    public void GetButtonFORWADR()
     {
         Speed = new Vector3(0, 0, mainSpeed);
     }
 
-    public void GetButtonDOWN()
+    public void GetButtonBACKWARD()
     {
         Speed = new Vector3(0, 0, -mainSpeed);
     }
@@ -59,6 +59,16 @@ public class CameraScript : MonoBehaviour
     public void GetButtonRIGHT()
     {
         Speed = new Vector3(mainSpeed, 0, 0);
+    }
+
+    public void GetButtonUP()
+    {
+        Speed = new Vector3(0, mainSpeed, 0);
+    }
+
+    public void GetButtonDOWN()
+    {
+        Speed = new Vector3(0, -mainSpeed, 0);
     }
 
     public void StartPoition()
@@ -96,6 +106,9 @@ public class CameraScript : MonoBehaviour
             StartPoition();
 
         if (Camera.main.transform.position.x >= 16 || Camera.main.transform.position.x <= -16)
+            StartPoition();
+
+        if (Camera.main.transform.position.y >= 16 || Camera.main.transform.position.y <= -1)
             StartPoition();
     }
 }
